@@ -1,0 +1,3 @@
+#!/bin/bash
+updatedb --database-root /pub/mp3/Artists/ -o /pub/mp3/mp3.db
+chmod 664 /pub/mp3/mp3.db

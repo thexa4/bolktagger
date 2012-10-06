@@ -1,0 +1,35 @@
+Bolk Music Tagger
+
+ The goal of this application is to process music files supplied by users. This 
+ is done by using a music fingerprinter.
+
+Goals:
+ - Creating a simple and intuitive way to add music to the music library.
+ - Having consistent folder/file names.
+ - Deduplicating the music library
+ - Enabling searching in the music library
+
+Folders:
+ - Music is stored at /pub/mp3/Autotagger/Artists/
+ - Playlists are stored at /pub/mp3/Autotagger/Playlists/
+ - The processing queue is stored at /pub/mp3/Autotagger/Queue/
+    and consists of the following subqueues:
+    - Playlists
+    - Albums
+
+Process:
+ Albums:
+   All the files in the Albums queue are fingerprinted and identified online using
+   AcoustID. The correct id3 tags are saved to the mp3 file. The mp3 file is stored
+   in the library using the following format it it's not already there:
+    Artists/Name/Album/Title.mp3
+   If the file already exists, the file in the queue is deleted.
+
+ Playlists:
+   All the files in the Playlists queue are fingerprinted and identified using
+   AcoustID. The correct id3 tags are saved to the mp3 file. The file will be stored
+   in the music library using the previously mentioned format. Subsequently a
+   symlink is created in the Playlists folder in the correct folder:
+    Queue/Playlists/OWee/Rustig/intro.mp3 will create a symlink named Playlists/Owee/Rustig/intro.mp3
+   If the correct id3 tags cannot be determined the mp3 file itself is copied
+   to the playlists folder.
