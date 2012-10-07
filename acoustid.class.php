@@ -22,10 +22,18 @@ class Acoustid
 
 		$match = $output->results[0]->recordings[0];
 
+		$albummbid = array();
+
+		foreach($match->releasegroups as $release)
+			$albummbid[] = $release->id;
+
 		return array("artist" => $match->artists[0]->name,
 			"album" => $match->releasegroups[0]->title,
 			"title" => $match->title,
-			"mbid" => $match->id);
+			"mbid" => $match->id,
+			"artistmbid" => $match->artists[0]->id,
+			"albummbid" => $albummbid,
+		);
 	}
 }
 ?>

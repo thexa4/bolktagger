@@ -17,7 +17,7 @@ function process($folder)
 	$dir = scandir($input . $folder);
 	foreach($dir as $entry)
 	{
-		if($entry[0] == '.')
+		if($entry == '.' | $entry == '..')
 			continue;
 
 		if(is_dir($input . $folder . $entry . '/'))
@@ -46,7 +46,7 @@ function process($folder)
 				if(is_file(Tagger::GetFilename($input . $file, $tags['artist'], $tags['album'] , $tags['title'])))
 				{
 					//already exists
-					Tagger::Tag($input . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid']);
+					Tagger::Tag($input . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid'], $tags['albummbid'], $tags['artistmbid']);
 					$location = Tagger::GetFilename($input . $file, $tags['artist'], $tags['album'] , $tags['title']);
 					$old = md5_file($location);
 					$new = md5_file($input . $file);

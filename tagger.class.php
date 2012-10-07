@@ -1,7 +1,8 @@
 <?php
 class Tagger
 {
-	const destination = "/pub/mp3/Artists/";
+	const destination = "/pub/mp3/All/";
+	const systemfolder = "/pub/mp3/.tagger/";
 
 	//Adds id3 tags to filename
 	static function Tag($filename, $artist, $album, $title, $mbid)
@@ -30,25 +31,51 @@ class Tagger
 
 	//Adds id3 tags to filename and moves it to the right location
 	//Returns: new path or null on error
-	static function Process($filename, $artist, $album, $title, $mbid)
+	static function Process($filename, $artist, $album, $title, $mbid, $albummbids, $artistmbid)
 	{
 		if(empty($filename) || empty($artist) || empty($title) || empty($mbid))
 			return null;
 
+		setlocale(LC_ALL, 'en_GB.utf8');
 		self::Tag($filename, $artist, $album, $title, $mbid);
 
-		setlocale(LC_ALL, 'en_GB.utf8');
-		$newpath = self::destination . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $artist))) . '/' . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$album)));
+		// Create internal number folder
+		$intNumberPath = self::systemfolder . '/records/' . substr($mbid, 0, 2);
+		if(!is_dir($intNumberPath))
+			mkdir($intNumberPath, 0775, true);
 
-		if(!is_dir($newpath))
-			mkdir($newpath, 0775, true);
+		$newpath = $intNumberPath . '/' . $mbid;
 
-		$newname = $newpath . '/' . str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $title) . '.' .  pathinfo($filename)['extension']);
-		if(file_exists($newname))
+		if(file_exists($newpath))
+		{
 			unlink($filename);
+			return true;
+		}
 		else
-			rename($filename, $newname);
-		return $newname;
+		{
+			rename($filename, $newpath);
+		}
+
+		// Add to albums
+		$newtitle = str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $title) . '.' .  pathinfo($filename)['extension']);
+		foreach($albummbids as $albummbid)
+		{
+			// Create internal album folders
+			$intAlbumPath = self::systemfolder . '/albums/' . substr($albummbid, 0, 2) . '/' . $albummbid;
+			if(!is_dir($intAlbumPath))
+				mkdir($intAlbumPath, 0775, true);
+
+			@symlink($newpath, $intAlbumPath . '/' . $newtitle);
+		}
+
+		// Add to all
+		$path = self::GetFilename($filename, $artist, $album, $title);
+		$dir = pathinfo($path)['dirname'];
+		if(!is_dir($dir))
+			mkdir($dir, 0775, true);
+		@symlink($newpath, $path);
+
+		return $path;
 	}
 
 	static function GetFilename($filename, $artist, $album, $title)

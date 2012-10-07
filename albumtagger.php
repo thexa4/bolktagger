@@ -17,7 +17,7 @@ function process($folder)
 	$dir = scandir($input . $folder);
 	foreach($dir as $entry)
 	{
-		if($entry[0] == '.')
+		if($entry == '.' | $entry == '..')
 			continue;
 
 		if(is_dir($input . $folder . $entry . '/'))
@@ -41,14 +41,14 @@ function process($folder)
 
 			if(empty($tags['artist']))
 			{
-				mkdir($untaggable . $folder, 0755, true);
+				@mkdir($untaggable . $folder, 0755, true);
 				rename($input . $file, $untaggable . $file);
 				print "unrecognised number\n";
 				continue;
 			}
 
 			//fingerprinting successfull
-			Tagger::Process($input . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid']);
+			Tagger::Process($input . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid'], $tags['albummbid'], $tags['artistmbid']);
 			print "\n";
 
 			usleep(300);
