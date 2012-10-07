@@ -1,0 +1,2 @@
+chown -R jukebox:jukebox /pub/mp3/{All,Albums,Playlists,Queue,Untaggable}
+chmod 777 -R /pub/mp3/Queue/{Albums,Playlists}
