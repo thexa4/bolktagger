@@ -55,7 +55,13 @@ foreach($prefixes as $prefix)
 		// Add to Artist Albums folder
 		setlocale(LC_ALL, 'en_GB.utf8');
 		$artistpath = $output . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $artist))) . '/';
-		@mkdir($artistpath, 0775, true);
-		@symlink($dir, $artistpath . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$title))));
+		$fullpath = $artistpath . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$title)));
+		if(!file_exists($fullpath))
+		{
+			if(!is_dir($artistpath))
+				mkdir($artistpath, 0775, true);
+			symlink($dir, $fullpath);
+			print $artist . ' - ' . $title . " added.\n";
+		}
 	}
 }

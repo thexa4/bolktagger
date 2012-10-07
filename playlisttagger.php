@@ -61,7 +61,7 @@ function process($folder)
 					}
 				} else {
 					//does not exist, copy
-					$location = Tagger::Process($input . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid']);
+					$location = Tagger::Process($input . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid'], $tags['albummbid'], $tags['artistmbid']);
 					exec('ln -s -n ' . escapeshellarg($location) . ' ' . escapeshellarg($output . $file));
 				}
 			} else {
