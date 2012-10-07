@@ -10,9 +10,9 @@ Goals:
  - Enabling searching in the music library
 
 Folders:
- - Music is stored at /pub/mp3/Autotagger/Artists/
- - Playlists are stored at /pub/mp3/Autotagger/Playlists/
- - The processing queue is stored at /pub/mp3/Autotagger/Queue/
+ - Music is stored at /pub/mp3/.tagger/records/
+ - Playlists are stored at /pub/mp3/Playlists/
+ - The processing queue is stored at /pub/mp3/Queue/
     and consists of the following subqueues:
     - Playlists
     - Albums
