@@ -19,7 +19,7 @@ class Settings
 	const PlaylistQueuePath = '/pub/mp3/Queue/Playlists/';
 
 	const SystemPath = '/pub/mp3/.tagger/';
-	const SystemAlbumPath = '/pub/mp3/.tagger/albums/';
+	const SystemAlbumPath = '/pub/mp3/.tagger/albums2/';
 	const SystemRecordPath = '/pub/mp3/.tagger/records2/';
 	const SystemReleasePath = '/pub/mp3/.tagger/releases/';
 
