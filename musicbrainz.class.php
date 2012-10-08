@@ -49,6 +49,29 @@ class Musicbrainz
 		}
 	}
 
+	function GetRecordMetadata($mbid)
+	{
+		self::InitCurl();
+
+		$location = Settings::SystemRecordPath . $mbid;
+		if(file_exists($location . '/.mbinfo'))
+			return file_get_contents($location . '/.mbinfo');
+
+		if(!is_dir($location))
+			mkdir($location, 0775, true);
+
+		curl_setopt(self::$curl, CURLOPT_URL, self::endpoint . 'recording/' . $mbid . '?inc=artists+releases');
+		$output = curl_exec(self::$curl);
+
+		$f = fopen($location . '/.mbinfo', 'w');
+		fwrite($f, $output);
+		fclose($f);
+
+		sleep(1);
+
+		return $output;
+	}
+
 	function ParseReleaseGroupInfo($xml)
 	{
 		$xml = simplexml_load_string($xml);
