@@ -1,20 +1,25 @@
 <?php
+include('settings.class.php');
 class Musicbrainz
 {
 	protected static $curl = null;
 	const endpoint = "http://www.musicbrainz.org/ws/2/";
-	const systemfolder = "/pub/mp3/.tagger/";
 
-	function DownloadMetadata($albummbid)
+	function InitCurl()
 	{
-		if(self::$curl == null)
-		{
-			self::$curl = curl_init(self::endpoint);
-			curl_setopt(self::$curl, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt(self::$curl, CURLOPT_USERAGENT, 'BolkTagger/0.1 ( max@nieuwedelft.nl )' );
-		}
+		if(self::$curl != null)
+			return;
 
-		$albumpath = self::systemfolder . 'albums/' . substr($albummbid, 0, 2) . '/' . $albummbid . '/';
+		self::$curl = curl_init(self::endpoint);
+		curl_setopt(self::$curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt(self::$curl, CURLOPT_USERAGENT, 'BolkTagger/' . Settings::Version . ' ( ' . Settings::Email . ' )' );
+	}
+
+	function DownloadAlbumMetadata($albummbid)
+	{
+		self::InitCurl();
+
+		$albumpath = Settings::SystemAlbumPath . substr($albummbid, 0, 2) . '/' . $albummbid . '/';
 
 		if(is_dir($albumpath . '.releases/'))
 			return true;
@@ -27,17 +32,16 @@ class Musicbrainz
 
 		sleep(1);
 
-		if(!preg_match_all('/<release id="(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})"/', $output, $releases))
-			return false;
+		$info = self::ParseReleaseGroupInfo($output);
 
 		mkdir($albumpath . '.releases/', 0775);
 
-		foreach($releases[1] as $release)
+		foreach($info->releases as $release)
 		{
 			curl_setopt(self::$curl, CURLOPT_URL, self::endpoint . 'release/' . $release . '?inc=recordings');
 			$output = curl_exec(self::$curl);
 
-			$f = fopen($albumpath . '.releases/' . $release, 'w');
+			$f = fopen($albumpath . '.releases/' . $release->id, 'w');
 			fwrite($f, $output);
 			fclose($f);
 

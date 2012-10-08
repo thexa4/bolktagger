@@ -23,7 +23,7 @@ foreach($prefixes as $prefix)
 		if($album[0] == '.')
 			continue;
 
-		MusicBrainz::DownloadMetadata($album);
+		MusicBrainz::DownloadAlbumMetadata($album);
 
 		$dir = $input . $prefix . '/' . $album . '/';
 

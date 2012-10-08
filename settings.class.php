@@ -19,7 +19,7 @@ class Settings
 	const PlaylistQueuePath = '/pub/mp3/Queue/Playlists/';
 
 	const SystemPath = '/pub/mp3/.tagger/';
-	const SystemAlbumPath = '/pub/mp3/.tagger/albums2/';
+	const SystemAlbumPath = '/pub/mp3/.tagger/albums/';
 	const SystemRecordPath = '/pub/mp3/.tagger/records/';
 
 	// The minimum amount of records should be in an Album before it is put into FullAlbumPath
