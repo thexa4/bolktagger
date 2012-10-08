@@ -20,7 +20,8 @@ class Settings
 
 	const SystemPath = '/pub/mp3/.tagger/';
 	const SystemAlbumPath = '/pub/mp3/.tagger/albums/';
-	const SystemRecordPath = '/pub/mp3/.tagger/records/';
+	const SystemRecordPath = '/pub/mp3/.tagger/records2/';
+	const SystemReleasePath = '/pub/mp3/.tagger/releases/';
 
 	// The minimum amount of records should be in an Album before it is put into FullAlbumPath
 	const AlbumMinRecords = 4;
