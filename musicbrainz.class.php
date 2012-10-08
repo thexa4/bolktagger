@@ -44,5 +44,40 @@ class Musicbrainz
 			sleep(1);
 		}
 	}
+
+	function ParseReleaseGroupInfo($xml)
+	{
+		$xml = simplexml_load_string($xml);
+		$xml->registerXPathNamespace('m','http://musicbrainz.org/ns/mdd-2.0#');
+		$g = $xml->{'release-group'};
+
+		$res = new stdClass();
+		$res->type = (string)$g['type'];
+		$res->id = (string)$g['id'];
+		$res->title = (string)$g->title;
+		$res->firstReleaseDate = (string)$g->{'first-release-date'};
+		$res->primaryType = (string)$g->{'primary-type'};
+
+		$res->artistCredit = array();
+		foreach($g->{'artist-credit'}->{'name-credit'} as $credit)
+		{
+			$c = new stdClass();
+			$c->id = (string)$credit->artist['id'];
+			$c->name = (string)$credit->artist->name;
+			$c->sortName = (string)$credit->artist->{'sort-name'};
+			$res->artistCredit[] = $c;
+		}
+
+		$res->releases = array();
+		foreach($g->{'release-list'}->release as $release)
+		{
+			$r = new stdClass();
+			$r->id = (string)$release['id'];
+			$r->title = (string)$release->status;
+			$r->date = (string)$release->date;
+			$res->releases[] = $r;
+		}
+
+		return $res;
+	}
 }
-?>
