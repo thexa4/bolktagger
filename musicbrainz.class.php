@@ -15,14 +15,14 @@ class Musicbrainz
 		curl_setopt(self::$curl, CURLOPT_USERAGENT, 'BolkTagger/' . Settings::Version . ' ( ' . Settings::Email . ' )' );
 	}
 
-	function DownloadAlbumMetadata($albummbid)
+	function GetAlbumMetadata($albummbid)
 	{
 		self::InitCurl();
 
 		$albumpath = Settings::SystemAlbumPath . substr($albummbid, 0, 2) . '/' . $albummbid . '/';
 
 		if(is_dir($albumpath . '.releases/'))
-			return true;
+			return file_get_contents($albumpath . '.mbid');
 
 		curl_setopt(self::$curl, CURLOPT_URL, self::endpoint . 'release-group/' . $albummbid . '?inc=releases+artists');
 		$output = curl_exec(self::$curl);
@@ -39,14 +39,16 @@ class Musicbrainz
 		foreach($info->releases as $release)
 		{
 			curl_setopt(self::$curl, CURLOPT_URL, self::endpoint . 'release/' . $release . '?inc=recordings');
-			$output = curl_exec(self::$curl);
+			$data = curl_exec(self::$curl);
 
 			$f = fopen($albumpath . '.releases/' . $release->id, 'w');
-			fwrite($f, $output);
+			fwrite($f, $data);
 			fclose($f);
 
 			sleep(1);
 		}
+
+		return $output;
 	}
 
 	function GetRecordMetadata($mbid)
