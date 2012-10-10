@@ -1,7 +1,7 @@
 <?php
-include('acoustid.class.php');
-include('musicbrainz.class.php');
-include('tagger.class.php');
+include('../classes/acoustid.class.php');
+include('../classes/musicbrainz.class.php');
+include('../classes/tagger.class.php');
 
 print "Bolk Album Processor\n";
 

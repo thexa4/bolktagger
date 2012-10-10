@@ -1,7 +1,7 @@
 <?php
-include('acoustid.class.php');
-include('fingerprint.class.php');
-include('tagger.class.php');
+include_once('../classes/acoustid.class.php');
+include_once('../classes/fingerprint.class.php');
+include_once('../classes/tagger.class.php');
 
 print "Bolk Playlist Tagger\n";
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-php /opt/tagger/albumtagger.php >> /var/log/mp3.log
-php /opt/tagger/playlisttagger.php >> /var/log/mp3.log
-php /opt/tagger/albumprocessor.php >> /var/log/mp3.log
+php /opt/tagger/taggers/albumtagger.php >> /var/log/mp3.log
+php /opt/tagger/taggers/playlisttagger.php >> /var/log/mp3.log
+php /opt/tagger/processors/albumprocessor.php >> /var/log/mp3.log
 /opt/tagger/updatesearch
