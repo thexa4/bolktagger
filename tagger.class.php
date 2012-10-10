@@ -34,9 +34,9 @@ class Tagger
 			return null;
 
 		setlocale(LC_CTYPE, 'en_GB.UTF8');
-		$artist = iconv('UTF-8','ASCII/TRANSLIT//IGNORE', $artist);
-		$album = iconv('UTF-8','ASCII/TRANSLIT//IGNORE', $album);
-		$title = iconv('UTF-8','ASCII/TRANSLIT//IGNORE', $title);
+		$artist = iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $artist);
+		$album = iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $album);
+		$title = iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $title);
 
 		self::Tag($filename, $artist, $album, $title, $mbid);
 
@@ -58,6 +58,6 @@ class Tagger
 			rename($filename, $newpath);
 		}
 
-		return $newname;
+		return $newpath;
 	}
 }

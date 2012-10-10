@@ -1,55 +1,50 @@
 <?php
-include('acoustid.class.php');
-include('fingerprint.class.php');
-include('tagger.class.php');
+include_once('acoustid.class.php');
+include_once('fingerprint.class.php');
+include_once('tagger.class.php');
+include_once('settings.class.php');
 
 print "Bolk Album Tagger\n";
-
-$input = '/pub/mp3/Queue/Albums/';
-$untaggable = '/pub/mp3/Untaggable/';
 
 process('');
 
 function process($folder)
 {
-	global $input, $output, $untaggable;
-
-	$dir = scandir($input . $folder);
+	$dir = scandir(Settings::AlbumQueuePath . $folder);
 	foreach($dir as $entry)
 	{
 		if($entry == '.' | $entry == '..')
 			continue;
 
-		if(is_dir($input . $folder . $entry . '/'))
+		if(is_dir(Settings::AlbumQueuePath . $folder . $entry . '/'))
 		{
 			process($folder . $entry . '/');
-			rmdir($input . $folder . $entry . '/');
+			rmdir(Settings::AlbumQueuePath . $folder . $entry . '/');
 		}
 		else
 		{
 			$file = $folder . $entry;
-			print $file . ': ';
 
-			$data = new Fingerprint($input . $file);
+			$data = new Fingerprint(Settings::AlbumQueuePath . $file);
 			if($data->acoustid == false)
 			{
-				unlink($input . $file);
-				print "fingerprint failed\n";
+				unlink(Settings::AlbumQueuePath . $file);
+				print $file . ": fingerprint failed\n";
 				continue;
 			}
 			$tags = @Acoustid::GetMetadata($data);
 
 			if(empty($tags['artist']))
 			{
-				@mkdir($untaggable . $folder, 0755, true);
-				rename($input . $file, $untaggable . $file);
-				print "unrecognised number\n";
+				@mkdir(Settings::UntaggablePath . $folder, 0755, true);
+				rename(Settings::AlbumQueuePath . $file, Settings::UntaggablePath . $file);
+				print $file . ": unrecognised number\n";
 				continue;
 			}
 
 			//fingerprinting successfull
-			Tagger::Process($input . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid'], $tags['albummbid'], $tags['artistmbid']);
-			print "\n";
+			Tagger::Process(Settings::AlbumQueuePath . $file, $tags['artist'], $tags['album'], $tags['title'], $tags['mbid']);
+			print $file . ": done\n";
 
 			usleep(300);
 		}
