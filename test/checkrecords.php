@@ -4,11 +4,15 @@ include_once('../classes/musicbrainz.class.php');
 include_once('../classes/tagger.class.php');
 
 print "Bolk Record Checker\n";
-if($argc < 2)
+
+$autofix = false;
+if($argc >= 2 && $argv[1] == 'true')
 {
-	print "Usage: php recordchecker.php <AutoFix>\n";
-	print "Example: php recordchecker.php true\n";
-	exit;
+	$autofix = true;
+	Settings::EnsureOnlyRunning();
+	print "Running in Autofix mode\n";
+} else {
+	print "Run with argument true to autofix issues (where possible)\n";
 }
 
 $prefixes = scandir(Settings::SystemRecordPath);
@@ -27,8 +31,11 @@ foreach($prefixes as $prefix)
 
 		if(!is_file($dir . '.mbinfo'))
 		{
-			//print $record . ": no mbinfo file, try running processrecords.php\n";
-			continue;
+			print $record . ": no mbinfo file, try running processrecords.php\n";
+			if(!$autofix)
+				continue;
+			MusicBrainz::GetRecordMetadata($record);
+			print $record . ": downloaded new .mbinfo\n";
 		}
 
 		// Get metadata
@@ -36,13 +43,25 @@ foreach($prefixes as $prefix)
 		if(!$info)
 		{
 			print $record . ": invalid .mbinfo file!\n";
-			continue;
+
+			if(!$autofix)
+				continue;
+
+			unlink($dir . '.mbinfo');
+			MusicBrainz::GetRecordMetadata($record);
+			print $record . ": downloaded new .mbinfo\n";
 		}
 
 		if(!is_file($dir . 'record'))
 		{
 			print $record . ": no mp3 file found!\n";
-			continue;
+
+			if(!$autofix)
+				continue;
+
+			unlink($dir . '.mbinfo');
+			rmdir($dir);
+			print $record . ": removed record folder\n";
 		}
 
 	}
