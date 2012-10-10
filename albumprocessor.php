@@ -5,27 +5,21 @@ include('tagger.class.php');
 
 print "Bolk Album Processor\n";
 
-$input = '/pub/mp3/.tagger/albums/';
-$output = '/pub/mp3/Albums/';
-
-// Minimum numbers to show up in public list
-$mincount = 4;
-
-$prefixes = scandir($input);
+$prefixes = scandir(Settings::SystemAlbumPath);
 foreach($prefixes as $prefix)
 {
 	if($prefix[0] == '.')
 		continue;
 
-	$albums = scandir($input . $prefix . '/');
+	$albums = scandir(Settings::SystemAlbumPath . $prefix . '/');
 	foreach($albums as $album)
 	{
 		if($album[0] == '.')
 			continue;
 
-		MusicBrainz::GetAlbumMetadata($album);
+		$xml = MusicBrainz::GetAlbumMetadata($album);
 
-		$dir = $input . $prefix . '/' . $album . '/';
+		$dir = Settings::SystemAlbumPath . $prefix . '/' . $album . '/';
 
 		$records = scandir($dir);
 		$count = 0;
@@ -33,28 +27,26 @@ foreach($prefixes as $prefix)
 			if($record[0] != '.')
 				$count++;
 
-		if($count < $mincount)
+		if($count < Settings::AlbumMinRecords)
 			continue;
 
-		$xml = simplexml_load_file($dir . '.mbinfo');
-		$xml->registerXPathNamespace('m','http://musicbrainz.org/ns/mmd-2.0#');
+		$info = MusicBrainz::ParseReleaseGroupInfo($xml);
 
-		$artists = $xml->xpath('//m:artist/m:name');
-		$title = $xml->xpath('m:release-group/m:title');
+		$artists = $info->artistCredit;
+		$title = $info->title;
 
 		// No artist(s) attached
-		if(count($artists) == 0 || count($title) == 0)
+		if(count($artists) == 0 || !$title)
 		{
 			print 'Error in album ' . $album . ", no title or artist\n";
 			continue;
 		}
 
-		$title = $title[0];
-		$artist = $artists[0];
+		$artist = $artists[0]->name;
 
 		// Add to Artist Albums folder
 		setlocale(LC_ALL, 'en_GB.utf8');
-		$artistpath = $output . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $artist))) . '/';
+		$artistpath = Settings::FullAlbumPath . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $artist))) . '/';
 		$fullpath = $artistpath . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$title)));
 		if(!file_exists($fullpath))
 		{

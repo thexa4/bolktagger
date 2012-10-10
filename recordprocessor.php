@@ -16,7 +16,6 @@ foreach($prefixes as $prefix)
 	{
 		if($record[0] == '.')
 			continue;
-		print("hi\n");
 
 		// Get metadata
 		$info = MusicBrainz::ParseRecordInfo(MusicBrainz::GetRecordMetadata($record));
@@ -32,9 +31,9 @@ foreach($prefixes as $prefix)
 			$ambid = $relinfo->releaseGroup->id;
 			$dir = Settings::SystemAlbumPath . substr($ambid, 0, 2) . '/' . $ambid . '/';
 			if(!is_dir($dir))
-				mkdir(dir, 0775, true);
+				mkdir($dir, 0775, true);
 
-			@symlink(Settings::SystemRecordPath . $prefix . '/' . $record . '/record', $dir . $title);
+			@symlink(Settings::SystemRecordPath . $prefix . '/' . $record . '/record', $dir . str_replace('/','',$title));
 		}
 
 		// Place in All folder
@@ -42,8 +41,14 @@ foreach($prefixes as $prefix)
 		$album = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $info->releases[0]->title);
 
 		$dir = Settings::AllAlbumsPath . str_replace('/','',$artist) . '/' . str_replace('/','',$album) . '/';
-		if(!is_dir($dir))
-			mkdir($dir, 0775, true);
-		@symlink(Settings::SystemRecordPath . $prefix . '/' . $record . '/record', $dir . str_replace('/','',$title);
+		$file = $dir . str_replace('/','',$title);
+
+		if(!is_file($file))
+		{
+			if(!is_dir($dir))
+				mkdir($dir, 0775, true);
+			symlink(Settings::SystemRecordPath . $prefix . '/' . $record . '/record', $file);
+			print $artist . ' - ' . $title . '[' . $album . "]: done\n";
+		}
 	}
 }

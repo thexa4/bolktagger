@@ -21,7 +21,7 @@ class Musicbrainz
 
 		$albumpath = Settings::SystemAlbumPath . substr($albummbid, 0, 2) . '/' . $albummbid . '/';
 
-		if(is_dir($albumpath . '.releases/'))
+		if(is_dir($albumpath . '.releases/') && is_file($albumpath . '.mbid'))
 			return file_get_contents($albumpath . '.mbid');
 
 		curl_setopt(self::$curl, CURLOPT_URL, self::endpoint . 'release-group/' . $albummbid . '?inc=releases+artists');
@@ -34,11 +34,11 @@ class Musicbrainz
 
 		$info = self::ParseReleaseGroupInfo($output);
 
-		mkdir($albumpath . '.releases/', 0775);
+		@mkdir($albumpath . '.releases/', 0775);
 
 		foreach($info->releases as $release)
 		{
-			GetReleaseMetadata($release->id);
+			self::GetReleaseMetadata($release->id);
 			@symlink(Settings::SystemReleasePath . substr($release->id, 0, 2) . '/' . $release->id . '/.mbinfo', $albumpath . '.releases/' . $release->id);
 		}
 
@@ -94,6 +94,9 @@ class Musicbrainz
 	{
 		$xml = simplexml_load_string($xml);
 		$g = $xml->{'release-group'};
+
+		if(!$g)
+			return false;
 
 		$res = new stdClass();
 		$res->type = (string)$g['type'];
@@ -156,6 +159,8 @@ class Musicbrainz
 	{
 		$xml = simplexml_load_string($xml);
 		$r = $xml->release;
+		if(!$r)
+			return false;
 		$res = new stdClass();
 
 		$res->id = (string)$r['id'];
