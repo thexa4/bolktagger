@@ -4,6 +4,7 @@ include_once('../classes/fingerprint.class.php');
 include_once('../classes/tagger.class.php');
 
 print "Bolk Playlist Tagger\n";
+Settings::EnsureOnlyRunning();
 
 $input = '/pub/mp3/Queue/Playlists/';
 $output = '/pub/mp3/Playlists/';

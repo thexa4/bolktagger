@@ -4,6 +4,7 @@ include('../classes/musicbrainz.class.php');
 include('../classes/tagger.class.php');
 
 print "Bolk Album Processor\n";
+Settings::EnsureOnlyRunning();
 
 $prefixes = scandir(Settings::SystemAlbumPath);
 foreach($prefixes as $prefix)

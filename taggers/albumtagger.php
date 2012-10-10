@@ -5,6 +5,7 @@ include_once('../classes/tagger.class.php');
 include_once('../classes/settings.class.php');
 
 print "Bolk Album Tagger\n";
+Settings::EnsureOnlyRunning();
 
 process('');
 

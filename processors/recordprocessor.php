@@ -4,6 +4,7 @@ include_once('../classes/musicbrainz.class.php');
 include_once('../classes/tagger.class.php');
 
 print "Bolk Record Processor\n";
+Settings::EnsureOnlyRunning();
 
 $prefixes = scandir(Settings::SystemRecordPath);
 foreach($prefixes as $prefix)
