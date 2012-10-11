@@ -1,7 +1,7 @@
 <?php
-include_once('../classes/acoustid.class.php');
-include_once('../classes/musicbrainz.class.php');
-include_once('../classes/tagger.class.php');
+include_once('classes/acoustid.class.php');
+include_once('classes/musicbrainz.class.php');
+include_once('classes/tagger.class.php');
 
 print "Bolk Record Processor\n";
 Settings::EnsureOnlyRunning();
@@ -21,8 +21,7 @@ foreach($prefixes as $prefix)
 		// Get metadata
 		$info = MusicBrainz::ParseRecordInfo(MusicBrainz::GetRecordMetadata($record));
 
-		setlocale(LC_CTYPE, 'en_GB.UTF8');
-		$title = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $info->title);
+		$title = Settings::CleanString($info->title);
 
 		// Place in internal album folders
 		foreach($info->releases as $release)
@@ -38,8 +37,8 @@ foreach($prefixes as $prefix)
 		}
 
 		// Place in All folder
-		$artist = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $info->artistCredit[0]->name);
-		$album = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $info->releases[0]->title);
+		$artist = Settings::CleanString($info->artistCredit[0]->name);
+		$album = Settings::CleanString($info->releases[0]->title);
 
 		$dir = Settings::AllAlbumsPath . str_replace('/','',$artist) . '/' . str_replace('/','',$album) . '/';
 		$file = $dir . str_replace('/','',$title);
@@ -49,7 +48,7 @@ foreach($prefixes as $prefix)
 			if(!is_dir($dir))
 				mkdir($dir, 0775, true);
 			symlink(Settings::SystemRecordPath . $prefix . '/' . $record . '/record', $file);
-			print $artist . ' - ' . $title . '[' . $album . "]: done\n";
+			print $record . ': ' . $artist . ' - ' . $title . '[' . $album . "]: done\n";
 		}
 	}
 }

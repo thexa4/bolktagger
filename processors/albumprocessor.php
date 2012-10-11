@@ -1,7 +1,7 @@
 <?php
-include('../classes/acoustid.class.php');
-include('../classes/musicbrainz.class.php');
-include('../classes/tagger.class.php');
+include('classes/acoustid.class.php');
+include('classes/musicbrainz.class.php');
+include('classes/tagger.class.php');
 
 print "Bolk Album Processor\n";
 Settings::EnsureOnlyRunning();
@@ -46,13 +46,17 @@ foreach($prefixes as $prefix)
 		$artist = $artists[0]->name;
 
 		// Add to Artist Albums folder
-		setlocale(LC_ALL, 'en_GB.utf8');
-		$artistpath = Settings::FullAlbumPath . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $artist))) . '/';
-		$fullpath = $artistpath . str_replace('.','',str_replace('/','',iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$title)));
+		$basepath = Settings::FullAlbumPath . str_replace('.','',str_replace('/','', Settings::CleanString($artist))) . '/';
+		if($info->type == "Compilation")
+			$basepath = Settings::CompilationsPath;
+		elseif($info->type == "Soundtrack")
+			$basepath = Settings::SoundtracksPath;
+
+		$fullpath = $basepath . str_replace('.','',str_replace('/','', Settings::CleanString($title)));
 		if(!file_exists($fullpath))
 		{
-			if(!is_dir($artistpath))
-				mkdir($artistpath, 0775, true);
+			if(!is_dir($basepath))
+				mkdir($basepath, 0775, true);
 			symlink($dir, $fullpath);
 			print $artist . ' - ' . $title . " added.\n";
 		}

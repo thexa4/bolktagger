@@ -1,8 +1,8 @@
 <?php
-include_once('../classes/acoustid.class.php');
-include_once('../classes/fingerprint.class.php');
-include_once('../classes/tagger.class.php');
-include_once('../classes/settings.class.php');
+include_once('classes/acoustid.class.php');
+include_once('classes/fingerprint.class.php');
+include_once('classes/tagger.class.php');
+include_once('classes/settings.class.php');
 
 print "Bolk Album Tagger\n";
 Settings::EnsureOnlyRunning();

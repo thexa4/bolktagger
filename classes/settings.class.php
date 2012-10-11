@@ -12,6 +12,8 @@ class Settings
 	const FullAlbumPath = '/pub/mp3/Albums/';
 	const AllAlbumsPath = '/pub/mp3/All/';
 	const PlaylistPath = '/pub/mp3/Playlists/';
+	const CompilationsPath = '/pub/mp3/Compilations/';
+	const SoundtracksPath = '/pub/mp3/Soundtracks';
 
 	const UntaggablePath = '/pub/mp3/Untaggable/';
 
@@ -27,6 +29,12 @@ class Settings
 
 	// The minimum amount of records should be in an Album before it is put into FullAlbumPath
 	const AlbumMinRecords = 4;
+
+	function CleanString($string)
+	{
+		setlocale(LC_ALL, 'en_GB.UTF8');
+		return iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $string);
+	}
 
 	function EnsureOnlyRunning()
 	{

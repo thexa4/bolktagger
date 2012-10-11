@@ -1,7 +1,7 @@
 <?php
-include_once('../classes/acoustid.class.php');
-include_once('../classes/fingerprint.class.php');
-include_once('../classes/tagger.class.php');
+include_once('classes/acoustid.class.php');
+include_once('classes/fingerprint.class.php');
+include_once('classes/tagger.class.php');
 
 print "Bolk Playlist Tagger\n";
 Settings::EnsureOnlyRunning();

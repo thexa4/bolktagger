@@ -120,7 +120,7 @@ class Musicbrainz
 	{
 		$r = new stdClass();
 		$r->id = (string)$xmlelement['id'];
-		$r->title = (string)$xmlelement->status;
+		$r->title = (string)$xmlelement->title;
 		$r->date = (string)$xmlelement->date;
 		return $r;
 	}

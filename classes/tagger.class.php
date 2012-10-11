@@ -33,10 +33,9 @@ class Tagger
 		if(empty($filename) || empty($artist) || empty($title) || empty($mbid))
 			return null;
 
-		setlocale(LC_CTYPE, 'en_GB.UTF8');
-		$artist = iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $artist);
-		$album = iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $album);
-		$title = iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $title);
+		$artist = Settings::CleanString($album);
+		$album = Settings::CleanString($album);
+		$title = Settings::CleanString($album);
 
 		self::Tag($filename, $artist, $album, $title, $mbid);
 
