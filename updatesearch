@@ -1,3 +1,3 @@
 #!/bin/bash
-updatedb --database-root /pub/mp3/All/ -o /pub/mp3/mp3.db
+updatedb --database-root /pub/mp3/Uploads/Tagged/ -o /pub/mp3/mp3.db
 chmod 664 /pub/mp3/mp3.db

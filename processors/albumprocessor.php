@@ -1,64 +1,11 @@
 <?php
-include('classes/acoustid.class.php');
-include('classes/musicbrainz.class.php');
-include('classes/tagger.class.php');
+include('classes/settings.class.php');
+include('classes/album.class.php');
 
 print "Bolk Album Processor\n";
 Settings::EnsureOnlyRunning();
 
-$prefixes = scandir(Settings::SystemAlbumPath);
-foreach($prefixes as $prefix)
-{
-	if($prefix[0] == '.')
-		continue;
-
-	$albums = scandir(Settings::SystemAlbumPath . $prefix . '/');
-	foreach($albums as $album)
-	{
-		if($album[0] == '.')
-			continue;
-
-		$xml = MusicBrainz::GetAlbumMetadata($album);
-
-		$dir = Settings::SystemAlbumPath . $prefix . '/' . $album . '/';
-
-		$records = scandir($dir);
-		$count = 0;
-		foreach($records as $record)
-			if($record[0] != '.')
-				$count++;
-
-		if($count < Settings::AlbumMinRecords)
-			continue;
-
-		$info = MusicBrainz::ParseReleaseGroupInfo($xml);
-
-		$artists = $info->artistCredit;
-		$title = $info->title;
-
-		// No artist(s) attached
-		if(count($artists) == 0 || !$title)
-		{
-			print 'Error in album ' . $album . ", no title or artist\n";
-			continue;
-		}
-
-		$artist = $artists[0]->name;
-
-		// Add to Artist Albums folder
-		$basepath = Settings::FullAlbumPath . str_replace('.','',str_replace('/','', Settings::CleanString($artist))) . '/';
-		if($info->type == "Compilation")
-			$basepath = Settings::CompilationsPath;
-		elseif($info->type == "Soundtrack")
-			$basepath = Settings::SoundtracksPath;
-
-		$fullpath = $basepath . str_replace('.','',str_replace('/','', Settings::CleanString($title)));
-		if(!file_exists($fullpath))
-		{
-			if(!is_dir($basepath))
-				mkdir($basepath, 0775, true);
-			symlink($dir, $fullpath);
-			print $artist . ' - ' . $title . " added.\n";
-		}
-	}
-}
+Album::ForAll(function($album) {
+	if(!isset($album->info) || !$album->info)
+		$album->GetInfo();
+});

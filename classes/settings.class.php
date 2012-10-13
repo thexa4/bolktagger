@@ -9,16 +9,16 @@ class Settings
 
 	const Mp3Path = '/pub/mp3/';
 
-	const FullAlbumPath = '/pub/mp3/Albums/';
-	const AllAlbumsPath = '/pub/mp3/All/';
+	const FullAlbumPath = '/pub/mp3/Artists/';
+	const AllAlbumsPath = '/pub/mp3/Uploads/Tagged/';
 	const PlaylistPath = '/pub/mp3/Playlists/';
 	const CompilationsPath = '/pub/mp3/Compilations/';
-	const SoundtracksPath = '/pub/mp3/Soundtracks';
+	const SoundtracksPath = '/pub/mp3/Soundtracks/';
 
-	const UntaggablePath = '/pub/mp3/Untaggable/';
+	const UntaggablePath = '/pub/mp3/Uploads/Untaggable/';
 
-	const AlbumQueuePath = '/pub/mp3/Queue/Albums/';
-	const PlaylistQueuePath = '/pub/mp3/Queue/Playlists/';
+	const AlbumQueuePath = '/pub/mp3/Uploads/Artists/';
+	const PlaylistQueuePath = '/pub/mp3/Uploads/Playlists/';
 
 	const SystemPath = '/pub/mp3/.tagger/';
 	const SystemAlbumPath = '/pub/mp3/.tagger/albums2/';
@@ -34,6 +34,12 @@ class Settings
 	{
 		setlocale(LC_ALL, 'en_GB.UTF8');
 		return iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $string);
+	}
+
+	// Strips leading dots, removes slashes and removes unicode characters
+	function CleanPath($string)
+	{
+		return preg_replace('/^\.+/','',str_replace('/','',self::CleanString($string)));
 	}
 
 	function EnsureOnlyRunning()

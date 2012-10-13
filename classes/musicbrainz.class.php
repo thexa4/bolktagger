@@ -21,8 +21,8 @@ class Musicbrainz
 
 		$albumpath = Settings::SystemAlbumPath . substr($albummbid, 0, 2) . '/' . $albummbid . '/';
 
-		if(is_dir($albumpath . '.releases/') && is_file($albumpath . '.mbid'))
-			return file_get_contents($albumpath . '.mbid');
+		if(is_dir($albumpath . '.releases/') && is_file($albumpath . '.mbinfo'))
+			return file_get_contents($albumpath . '.mbinfo');
 
 		curl_setopt(self::$curl, CURLOPT_URL, self::endpoint . 'release-group/' . $albummbid . '?inc=releases+artists');
 		$output = curl_exec(self::$curl);
@@ -47,6 +47,8 @@ class Musicbrainz
 
 	function GetReleaseMetadata($mbid)
 	{
+		self::InitCurl();
+
 		$path = Settings::SystemReleasePath . substr($mbid, 0, 2) . '/' . $mbid . '/';
 
 		if(file_exists($path . '.mbinfo'))

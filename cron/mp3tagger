@@ -4,4 +4,11 @@ php taggers/albumtagger.php >> /var/log/mp3.log
 #php taggers/playlisttagger.php >> /var/log/mp3.log
 php processors/recordprocessor.php >> /var/log/mp3.log
 php processors/albumprocessor.php >> /var/log/mp3.log
+php collectors/artistcollector.php >> /var/log/mp3.log
+php collectors/compilationcollector.php >> /var/log/mp3.log
+php collectors/soundtrackcollector.php >> /var/log/mp3.log
+php collectors/taggedcollector.php >> /var/log/mp3.log
 ./updatesearch
+php test/checkrecords.php
+php test/checkreleases.php
+php test/checkalbums.php
