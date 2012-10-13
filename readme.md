@@ -9,4 +9,8 @@ The application consists of taggers that collect mp3s from certain folders. The 
 
 Processors
 ----------
-These scripts collect information about the records (album info, release info, record info etc) and creates symlinks to the mp3 pool in the visible folders.
+These scripts collect information about the records (album info, release info, record info etc) and creates relations between records, albums and releases
+
+Collectors
+----------
+These scripts create symlinks from the pool to visible folders (Artists, Soundtracks, Compilations, etc)
