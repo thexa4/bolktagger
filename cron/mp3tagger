@@ -8,6 +8,7 @@ php collectors/artistcollector.php >> /var/log/mp3.log
 php collectors/compilationcollector.php >> /var/log/mp3.log
 php collectors/soundtrackcollector.php >> /var/log/mp3.log
 php collectors/taggedcollector.php >> /var/log/mp3.log
+php collectors/fullalbumcollector.php >> /var/log/mp3.log
 ./updatesearch
 php test/checkrecords.php
 php test/checkreleases.php

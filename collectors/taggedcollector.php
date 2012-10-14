@@ -27,7 +27,7 @@ Record::ForAll(function($record)
 	{
 		if(!is_dir($dir))
 			mkdir($dir, 0775, true);
-		symlink($record->path, $file);
+		symlink($record->path . 'record', $file);
 		print($record->mbid . ": added\n");
 	}
 });

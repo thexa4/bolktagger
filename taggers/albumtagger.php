@@ -17,7 +17,9 @@ function process($folder)
 		if($entry == '.' | $entry == '..')
 			continue;
 
-		if(is_dir(Settings::AlbumQueuePath . $folder . $entry . '/'))
+		$newdir = Settings::AlbumQueuePath . $folder . $entry . '/';
+
+		if(is_dir($newdir) && !is_link($newdir))
 		{
 			process($folder . $entry . '/');
 			rmdir(Settings::AlbumQueuePath . $folder . $entry . '/');

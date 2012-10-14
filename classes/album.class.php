@@ -23,6 +23,23 @@ class Album
 
 	function HasFullRelease()
 	{
+		$result = false;
+		$this->ForReleases(function($release) use ($result){
+			if($release->IsComplete())
+				$result = true;
+		});
+
+		return $result;
+	}
+
+	function GetInfo()
+	{
+		$this->info = MusicBrainz::ParseReleaseGroupInfo(MusicBrainz::GetAlbumMetadata($this->mbid));
+		return $this->info;
+	}
+
+	function ForReleases($function)
+	{
 		if(!$this->info)
 			$this->GetInfo();
 
@@ -33,17 +50,8 @@ class Album
 		foreach($this->info->releases as $releaseinfo)
 		{
 			$release = new Release($releaseinfo->id);
-			if($release->IsComplete())
-				return true;
+			$function($release);
 		}
-
-		return false;
-	}
-
-	function GetInfo()
-	{
-		$this->info = MusicBrainz::ParseReleaseGroupInfo(MusicBrainz::GetAlbumMetadata($this->mbid));
-		return $this->info;
 	}
 
 	public static function ForAll($function)

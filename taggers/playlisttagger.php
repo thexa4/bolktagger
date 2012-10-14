@@ -16,7 +16,9 @@ function process($folder)
 		if($entry == '.' | $entry == '..')
 			continue;
 
-		if(is_dir(Settings::PlaylistQueuePath . $folder . $entry . '/'))
+		$newdir = Settings::PlaylistQueuePath . $folder . $entry . '/';
+
+		if(is_dir($newdir) && !is_link($newdir))
 			process($folder . $entry . '/');
 		else
 		{
