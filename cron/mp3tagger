@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 cd /opt/tagger/
 php taggers/albumtagger.php >> /var/log/mp3.log
 #php taggers/playlisttagger.php >> /var/log/mp3.log

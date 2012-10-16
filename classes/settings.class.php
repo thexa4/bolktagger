@@ -25,7 +25,7 @@ class Settings
 	const SystemRecordPath = '/pub/mp3/.tagger/records2/';
 	const SystemReleasePath = '/pub/mp3/.tagger/releases/';
 
-	const LockPath = '/var/run/bolktagger.pid';
+	const LockPath = '/var/run/bolktagger/bolktagger.pid';
 
 	// The minimum amount of records should be in an Album before it is put into FullAlbumPath
 	const AlbumMinRecords = 4;
