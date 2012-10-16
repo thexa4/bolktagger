@@ -2,12 +2,22 @@
 include_once('classes/acoustid.class.php');
 include_once('classes/fingerprint.class.php');
 include_once('classes/tagger.class.php');
+include_once('classes/settings.class.php');
 
 print "Bolk Playlist Tagger\n";
 Settings::EnsureOnlyRunning();
 
-process('');
+Tagger::IterateFolder(Settings::PlaylistQueuePath,
+	function($file) {
+		exec('tools/getmbid ' . escapeshellarg($file));
+	},
+	function($dir) {
+		print $dir . "\n";
+	}
+);
 
+exit;
+	
 function process($folder)
 {
 	$dir = scandir(Settings::PlaylistQueuePath . $folder);

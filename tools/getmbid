@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+use MP3::Tag
+
+$mp3 = MP3::Tag->new(@ARGV[0]);
+$mp3->get_tags();
+
+$id = "";
+
+# if ID3v2 tags exists
+if (exists $mp3->{ID3v2})
+{
+	($value, $desc) = $mp3->{ID3v2}->get_frame('UFID');
+
+	if (ref $value)
+	{
+		$id = $$value{_Data};
+	}
+}
+
+# clean up
+$mp3->close();
+
+if (!$id)
+{
+	exit -1;
+} else {
+	print "$id\n";
+}

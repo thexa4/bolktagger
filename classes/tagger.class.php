@@ -26,6 +26,16 @@ class Tagger
 		return $match[0];
 	}
 
+	//Extracts the picard mbid
+	static function GetPicardMbid($filename)
+	{
+		exec('tools/getmbid ' . escapeshellarg($filename), $output, $exitcode);
+		if($exitcode != 0)
+			return false;
+
+		return $output[0];
+	}
+
 	//Adds id3 tags to filename and moves it to the right location
 	//Returns: new path or null on error
 	static function Process($filename, $artist, $album, $title, $mbid)
