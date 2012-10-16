@@ -61,7 +61,7 @@ class Tagger
 	}
 
 	// Run function for all files in directory
-	static function IterateFiles($path, $filefunction, $dirfunction)
+	static function IterateFolder($path, $filefunction, $dirfunction)
 	{
 		if(is_link($path))
 			return;
@@ -72,9 +72,10 @@ class Tagger
 		}
 		if(is_dir($path))
 		{
-			$sub = scandir($path)
-			foreach($entry in $sub)
-				self::IterateFiles($path . '/' . $entry);
+			$sub = scandir($path);
+			foreach($sub as $entry)
+				if($entry != '.' && $entry != '..')
+					self::IterateFolder($path . '/' . $entry, $filefunction, $dirfunction);
 
 			$dirfunction($path . '/');
 		}
