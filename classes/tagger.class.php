@@ -59,4 +59,24 @@ class Tagger
 
 		return $newpath;
 	}
+
+	// Run function for all files in directory
+	static function IterateFiles($path, $filefunction, $dirfunction)
+	{
+		if(is_link($path))
+			return;
+		if(is_file($path))
+		{
+			$filefunction($path);
+			return;
+		}
+		if(is_dir($path))
+		{
+			$sub = scandir($path)
+			foreach($entry in $sub)
+				self::IterateFiles($path . '/' . $entry);
+
+			$dirfunction($path . '/');
+		}
+	}
 }
