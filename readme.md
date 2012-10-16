@@ -5,8 +5,14 @@ This application tries to sort unordered directories of mp3s into Artist/Album/T
 
 Installation
 ------------
+ * Install php5-cli
+ * Install lltag
+ * Install chromaprint (fpcalc)
+ * Install php5-posix
+ * Create a system user
  * Make the cron script run regularly. Example (crontab): 40 * * * * jukebox /opt/tagger/cron/mp3tagger
- * Create a folder /var/run/bolktagger/ owned by the service user
+ * Create a folder /var/run/bolktagger/ owned by the created user
+ * Optionally edit classes/settings.class.php
 
 Taggers
 -------
