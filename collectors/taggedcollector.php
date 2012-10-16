@@ -2,7 +2,7 @@
 include_once('classes/settings.class.php');
 include_once('classes/record.class.php');
 
-print "Bolk Record Processor\n";
+print "Bolk Tagged Collector\n";
 Settings::EnsureOnlyRunning();
 
 Record::ForAll(function($record)
