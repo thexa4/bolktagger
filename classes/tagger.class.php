@@ -1,4 +1,8 @@
 <?php
+include_once('classes/settings.class.php');
+include_once('classes/record.class.php');
+include_once('classes/acoustid.class.php');
+
 class Tagger
 {
 	//Adds id3 tags to filename
@@ -14,6 +18,9 @@ class Tagger
 	static function GetMbid($filename)
 	{
 		exec('lltag --id3v2 --show-tags comment	' . escapeshellarg($filename) . ' 2>/dev/null', $output);
+
+		if(count($output) < 2)
+			return false;
 
 		//Return false if comment does not contain mbid signature
 		if(substr($output[1], 0, 15) != '  COMMENT=mbid:')
@@ -33,7 +40,45 @@ class Tagger
 		if($exitcode != 0)
 			return false;
 
-		return $output[0];
+		return preg_replace('/^[0-9a-fA-F-]/','',$output[0]);
+	}
+
+	static function AddFile($filename)
+	{
+		if(!is_file($filename))
+			return -1;
+
+
+		$data = new Fingerprint($filename);
+		if($data->acoustid == false)
+			return -1;
+
+		$mbids = Acoustid::GetMbid($data);
+		$usedfile = false;
+
+		if($mbids)
+		{
+			foreach($mbids as $mbid)
+			{
+				$record = new Record($mbid);
+				$usedfile = $record;
+				$record->SetFile($filename, true);
+			}
+
+			return $usedfile;
+		}
+
+		// Allow user supplied tags
+		$mbid = self::GetMbid($filename);
+		if(!$mbid)
+			$mbid = self::GetPicardMbid($filename);
+		if(!$mbid)
+			return false;
+
+		$record = new Record($mbid);
+		$record->SetFile($filename, false);
+
+		return $record;
 	}
 
 	//Adds id3 tags to filename and moves it to the right location
@@ -73,19 +118,25 @@ class Tagger
 	// Run function for all files in directory
 	static function IterateFolder($path, $filefunction, $dirfunction)
 	{
-		if(is_link($path))
+		self::IterateEntry($path, '', $filefunction, $dirfunction);
+	}
+
+	static function IterateEntry($base, $path, $filefunction, $dirfunction)
+	{
+		$entry = $base . $path;
+		if(is_link($entry))
 			return;
-		if(is_file($path))
+		if(is_file($entry))
 		{
 			$filefunction($path);
 			return;
 		}
-		if(is_dir($path))
+		if(is_dir($entry))
 		{
-			$sub = scandir($path);
-			foreach($sub as $entry)
-				if($entry != '.' && $entry != '..')
-					self::IterateFolder($path . '/' . $entry, $filefunction, $dirfunction);
+			$sub = scandir($entry);
+			foreach($sub as $s)
+				if($s != '.' && $s != '..')
+					self::IterateEntry($base, $path . '/' . $s, $filefunction, $dirfunction);
 
 			$dirfunction($path . '/');
 		}

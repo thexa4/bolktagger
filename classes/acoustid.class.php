@@ -4,7 +4,7 @@ class Acoustid
 {
 	protected static $curl = null;
 
-	function GetMetadata($fingerprint)
+	static function InitCurl()
 	{
 		if(self::$curl == null)
 		{
@@ -12,6 +12,36 @@ class Acoustid
 			curl_setopt(self::$curl, CURLOPT_POST, true);
 			curl_setopt(self::$curl, CURLOPT_RETURNTRANSFER, true);
 		}
+	}
+
+	static function GetMbid($fingerprint)
+	{
+		self::InitCurl();
+
+		curl_setopt(self::$curl, CURLOPT_POSTFIELDS, "client=" . Settings::AcoustIDKey . '&duration=' . $fingerprint->duration . '&fingerprint=' . $fingerprint->acoustid . '&meta=recordings');
+		$output = curl_exec(self::$curl);
+		$output = json_decode($output);
+
+		if($output->status != "ok")
+			return false;
+
+		$res = array();
+
+		if(!isset($output->results[0]->recordings))
+			return false;
+
+		foreach($output->results[0]->recordings as $recording)
+			$res[] = preg_replace('/[^0-9a-fA-F-]/','',$recording->id);
+
+		if(count($res) == 0)
+			return false;
+
+		return $res;
+	}
+
+	function GetMetadata($fingerprint)
+	{
+		self::InitCurl();
 
 		curl_setopt(self::$curl, CURLOPT_POSTFIELDS, "client=" . ACOUSTID_KEY . '&duration=' . $fingerprint->duration . '&fingerprint=' . $fingerprint->acoustid . '&meta=recordings+releasegroups+compress');
 		$output = curl_exec(self::$curl);

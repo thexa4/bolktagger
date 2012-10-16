@@ -9,11 +9,32 @@ Settings::EnsureOnlyRunning();
 
 Tagger::IterateFolder(Settings::PlaylistQueuePath,
 	function($file) {
-		exec('tools/getmbid ' . escapeshellarg($file));
+		$record = Tagger::AddFile(Settings::PlaylistQueuePath . $file);
+		if(is_int($record) && $record == -1)
+		{
+			// Not playable mp3 file
+			//unlink
+			print $file . " removed\n";
+			return;
+		}
+
+		$destination = Settings::PlaylistPath . $file;
+
+		$dir = pathinfo(Settings::PlaylistPath . $file)['dirname'];
+		if(!is_dir($dir))
+			mkdir($dir, 0775, true);
+
+		if($record)
+		{
+			if(is_file($destination))
+				unlink($destination);
+			symlink($record->file, $destination);
+		} else {
+			copy(Settings::PlaylistQueuePath . $file, $destination);
+		}
+		print $file . " done\n";
 	},
-	function($dir) {
-		print $dir . "\n";
-	}
+	function($dir) {}
 );
 
 exit;

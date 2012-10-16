@@ -20,7 +20,34 @@ class Record
 
 	function HasInfo()
 	{
-		return is_file($this->file);
+		return is_file($this->path . '.mbinfo');
+	}
+
+	function IsValidated()
+	{
+		return !is_file($this->path . '.notvalidated');
+	}
+
+	function SetFile($file, $validated)
+	{
+		if(!$this->Exists())
+		{
+			if(!is_dir($this->path))
+				mkdir($this->path, 0775, true);
+
+			copy($file, $this->file);
+
+			if(!$validated)
+				file_put_contents($this->path . '.notvalidated','');
+			return true;
+		} else {
+			if(!$validated || $this->IsValidated())
+				return false;
+
+			copy($file, $this->file);
+			unlink($this->path . '.notvalidated');
+			return true;
+		}
 	}
 
 	function GetInfo()
