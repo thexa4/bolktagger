@@ -6,6 +6,7 @@ print "Bolk Record Processor\n";
 Settings::EnsureOnlyRunning();
 
 Record::ForAll(function($record) {
+	$record->GetInfo();
 	$title = Settings::CleanPath($record->info->title) . '.mp3';
 	$changed = false;
 	$record->ForEachRelease(function($release) use ($record, $title, &$changed) {

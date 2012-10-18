@@ -21,8 +21,8 @@ class Settings
 	const PlaylistQueuePath = '/pub/mp3/Uploads/Playlists/';
 
 	const SystemPath = '/pub/mp3/.tagger/';
-	const SystemAlbumPath = '/pub/mp3/.tagger/albums2/';
-	const SystemRecordPath = '/pub/mp3/.tagger/records2/';
+	const SystemAlbumPath = '/pub/mp3/.tagger/albums/';
+	const SystemRecordPath = '/pub/mp3/.tagger/records/';
 	const SystemReleasePath = '/pub/mp3/.tagger/releases/';
 
 	const LockPath = '/var/run/bolktagger/bolktagger.pid';

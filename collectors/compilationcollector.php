@@ -1,10 +1,10 @@
 <?php
-include('classes/acoustid.class.php');
-include('classes/musicbrainz.class.php');
-include('classes/tagger.class.php');
-include('classes/album.class.php');
-include('classes/release.class.php');
-include('classes/record.class.php');
+include_once('classes/acoustid.class.php');
+include_once('classes/musicbrainz.class.php');
+include_once('classes/tagger.class.php');
+include_once('classes/album.class.php');
+include_once('classes/release.class.php');
+include_once('classes/record.class.php');
 
 print "Bolk Compilations Collector\n";
 Settings::EnsureOnlyRunning();

@@ -1,14 +1,14 @@
 <?php
-include('classes/acoustid.class.php');
-include('classes/musicbrainz.class.php');
-include('classes/tagger.class.php');
-include('classes/album.class.php');
+include_once('classes/acoustid.class.php');
+include_once('classes/musicbrainz.class.php');
+include_once('classes/tagger.class.php');
+include_once('classes/album.class.php');
 
 print "Bolk Artist Collector\n";
 Settings::EnsureOnlyRunning();
 
 Album::ForAll(function($album){
-	if(!$album->info)
+	if(!isset($album->info))
 		return;
 
 	if(!in_array($album->info->type, ['Album', 'Single', 'EP', 'Live', 'Other', 'Remix', 'Compilation']))

@@ -58,7 +58,7 @@ class Record
 
 	function ForEachRelease($function)
 	{
-		if(!$this->info)
+		if(!isset($this->info))
 			$this->GetInfo();
 
 		// If get failed

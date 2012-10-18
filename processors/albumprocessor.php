@@ -1,6 +1,6 @@
 <?php
-include('classes/settings.class.php');
-include('classes/album.class.php');
+include_once('classes/settings.class.php');
+include_once('classes/album.class.php');
 
 print "Bolk Album Processor\n";
 Settings::EnsureOnlyRunning();

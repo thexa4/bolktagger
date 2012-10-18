@@ -8,16 +8,16 @@ Settings::EnsureOnlyRunning();
 Record::ForAll(function($record)
 {
 	if(!$record->info)
-		continue;
+		return;
 
 	$title = Settings::CleanString($record->info->title);
 
 	if(count($record->info->artistCredit) < 1)
-		continue;
+		return;
 	$artist = Settings::CleanString($record->info->artistCredit[0]->name);
 
 	if(count($record->info->releases) < 1)
-		continue;
+		return;
 	$album = Settings::CleanString($record->info->releases[0]->title);
 
 	$dir = Settings::AllAlbumsPath . Settings::CleanPath($artist) . '/' . Settings::CleanPath($album) . '/';
