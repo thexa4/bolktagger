@@ -8,6 +8,7 @@ class Settings
 	const AcoustIDKey = 'GLgjIs5L';
 
 	const Mp3Path = '/pub/mp3/';
+	const Mp3Owner = 'jukebox:jukebox';
 
 	const FullAlbumPath = '/pub/mp3/Artists/';
 	const AllAlbumsPath = '/pub/mp3/Uploads/Tagged/';
@@ -25,6 +26,7 @@ class Settings
 	const SystemRecordPath = '/pub/mp3/.tagger/records2/';
 	const SystemReleasePath = '/pub/mp3/.tagger/releases/';
 
+	const LogPath = '/var/log/mp3.log';
 	const LockPath = '/var/run/bolktagger.pid';
 
 	// The minimum amount of records should be in an Album before it is put into FullAlbumPath

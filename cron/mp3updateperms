@@ -1,3 +1,7 @@
-#!/bin/bash
-chown -R jukebox:jukebox /pub/mp3/{All,Albums,Playlists,Queue,Untaggable}
-chmod 777 -R /pub/mp3/Queue/{Albums,Playlists}
+#!/bin/sh
+cd `dirname \`dirname $0\``
+MP3PATH=`./setting Mp3Path`
+MP3OWNER=`./setting Mp3Owner`
+
+chown -R ${MP3OWNER} ${MP3PATH}{All,Albums,Playlists,Queue,Untaggable}
+chmod 777 -R ${MP3PATH}Queue/{Albums,Playlists}

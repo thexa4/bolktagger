@@ -1,14 +1,16 @@
-#!/bin/bash
-cd /opt/tagger/
-php taggers/albumtagger.php >> /var/log/mp3.log
-#php taggers/playlisttagger.php >> /var/log/mp3.log
-php processors/recordprocessor.php >> /var/log/mp3.log
-php processors/albumprocessor.php >> /var/log/mp3.log
-php collectors/artistcollector.php >> /var/log/mp3.log
-php collectors/compilationcollector.php >> /var/log/mp3.log
-php collectors/soundtrackcollector.php >> /var/log/mp3.log
-php collectors/taggedcollector.php >> /var/log/mp3.log
-php collectors/fullalbumcollector.php >> /var/log/mp3.log
+#!/bin/sh
+cd `dirname \`dirname $0\``
+LOGPATH=`./setting LogPath`
+
+php taggers/albumtagger.php >> ${LOGPATH}
+#php taggers/playlisttagger.php >> ${LOGPATH}
+php processors/recordprocessor.php >> ${LOGPATH}
+php processors/albumprocessor.php >> ${LOGPATH}
+php collectors/artistcollector.php >> ${LOGPATH}
+php collectors/compilationcollector.php >> ${LOGPATH}
+php collectors/soundtrackcollector.php >> ${LOGPATH}
+php collectors/taggedcollector.php >> ${LOGPATH}
+#php collectors/fullalbumcollector.php >> ${LOGPATH}
 ./updatesearch
 php test/checkrecords.php
 php test/checkreleases.php
