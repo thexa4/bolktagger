@@ -1,3 +1,20 @@
-#!/bin/bash
-updatedb --database-root /pub/mp3/Uploads/Tagged/ -o /pub/mp3/mp3.db
-chmod 664 /pub/mp3/mp3.db
+#!/bin/sh
+MP3PATH=`./setting Mp3Path`
+ALLALBUMSPATH=`./setting AllAlbumsPath`
+UPDATEDB=updatedb
+
+# FreeBSD support
+if which -s gupdatedb; then
+	UPDATEDB=gupdatedb
+fi
+
+case `${UPDATEDB} --version` in
+	*findutils*)
+		${UPDATEDB} --localpaths=${ALLALBUMSPATH} --output=${MP3PATH}mp3.db
+		;;
+	*mlocate*)
+		${UPDATEDB} --database-root ${ALLALBUMSPATH} -o ${MP3PATH}mp3.db
+		;;
+esac
+
+chmod 664 ${MP3PATH}mp3.db
