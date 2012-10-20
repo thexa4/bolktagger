@@ -4,7 +4,7 @@ ALLALBUMSPATH=`./setting AllAlbumsPath`
 UPDATEDB=updatedb
 
 # FreeBSD support
-if which -s gupdatedb; then
+if which gupdatedb; then
 	UPDATEDB=gupdatedb
 fi
 
