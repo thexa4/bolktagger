@@ -4,49 +4,75 @@ include_once('classes/record.class.php');
 
 
 $autofix = false;
-$damage = false;
-if($argc >= 2 && $argv[1] == 'true')
+$forcefix = false;
+$damage = 0;
+if($argc >= 2 && ($argv[1] == 'true' || $argv[1] == 'force'))
 {
 	$autofix = true;
 	Settings::EnsureOnlyRunning();
 	print "Bolk Record Checker\n";
-	print "Running in Autofix mode\n";
+	if($argv[1] == 'force')
+	{
+		$forcefix = true;
+		print "Running in Forcefix mode! This will remove data!\n";
+	}
+	else
+	{
+		print "Running in Autofix mode\n";
+	}
 }
 
-Record::ForAll(function($record) use ($autofix, &$damage) {
+Record::ForAll(function($record) use ($autofix, $forcefix, &$damage) {
 
 	if(!is_file($record->file))
 	{
-		$damage = true;
+		$damage++;
 		print $record->mbid . ": no audio file present\n";
 		if($autofix)
 		{
 			unlink($record->path . '.mbinfo');
 			rmdir($record->path);
 			print " - removed record\n";
+			$damage--;
 		}
 	}
 
-	if(!$record->info)
+	if(!isset($record->info) || !$record->info)
 	{
-		$damage = true;
+		$damage++;
 		print $record->mbid . ": no info loaded\n";
 		if($autofix)
 		{
 			unlink($record->path . '.mbinfo');
 			$record->GetInfo();
 			if(!$record->info)
-				print " - cannot correct\n";
+			{
+				if($forcefix)
+				{
+					unlink($record->path . '.mbinfo');
+					unlink($record->path . 'record');
+					rmdir($record->path);
+					print " - removed record\n";
+					$damage--;
+				} else {
+					print " - cannot correct\n";
+				}
+			}
 			else
+			{
 				print " - fixed\n";
+				$damage--;
+			}
 		}
 	}
 });
 
-if($damage)
+if($damage > 0)
 {
-	if($autofix)
-		print "Fix attemted, please rerun without autofix\n";
+	if(!$autofix)
+		print $damage . " errors detected, please run 'php " . $argv[0] . " true' to autocorrect.\n";
 	else
-		print "Damage detected, please run 'php " . $argv[0] . " true' to autocorrect. (This might remove some data)\n";
+		print $damage . " unfixable errors detected, run 'php " . $argv[0] . " force' to remove unfixable records. This will remove data!\n";
 }
+if($autofix)
+	print "Fix attempted, please rerun without autofix\n";
