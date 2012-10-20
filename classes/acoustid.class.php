@@ -1,5 +1,5 @@
 <?php
-define('ACOUSTID_KEY', 'GLgjIs5L');
+include_once('settings.class.php');
 class Acoustid
 {
 	protected static $curl = null;
@@ -43,7 +43,7 @@ class Acoustid
 	{
 		self::InitCurl();
 
-		curl_setopt(self::$curl, CURLOPT_POSTFIELDS, "client=" . ACOUSTID_KEY . '&duration=' . $fingerprint->duration . '&fingerprint=' . $fingerprint->acoustid . '&meta=recordings+releasegroups+compress');
+		curl_setopt(self::$curl, CURLOPT_POSTFIELDS, "client=" . Settings::AcoustIDKey . '&duration=' . $fingerprint->duration . '&fingerprint=' . $fingerprint->acoustid . '&meta=recordings+releasegroups+compress');
 		$output = curl_exec(self::$curl);
 		$output = json_decode($output);
 
