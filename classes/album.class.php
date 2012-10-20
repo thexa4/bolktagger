@@ -62,13 +62,15 @@ class Album
 			if($prefix[0] == '.')
 				continue;
 
-			$albums = scandir(Settings::SystemAlbumPath . $prefix);
+			$albums = scandir(Settings::SystemAlbumPath . $prefix . '/');
 			foreach($albums as $album)
 			{
 				if($album[0] == '.')
 					continue;
 
 				$o = new Album($album);
+				if(strlen($album) == 2)
+					print Settings::SystemAlbumPath . $prefix . '/';
 
 				$function($o);
 			}
