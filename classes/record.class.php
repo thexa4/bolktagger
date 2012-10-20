@@ -56,6 +56,55 @@ class Record
 		return $this->info;
 	}
 
+	// Get the release the record should be tagged with
+	function GetTaggedRelease()
+	{
+		if(!isset($this->info))
+			$this->GetInfo();
+
+		$mindate = array();
+		$minreleases = array();
+		date_default_timezone_set('UTC');
+
+		$this->ForEachRelease(function($release) use (&$mindate, &$minreleases) {
+			$type = $release->info->releaseGroup->type;
+			$date = strptime($release->info->releaseGroup->firstReleaseDate, '%Y-%m-%d');
+			if(!$date)
+				$date = strptime($release->info->releaseGroup->firstReleaseDate, '%Y');
+			if(!$date)
+				return;
+
+			$time = mktime(0,0,0,$date['tm_mon'],$date['tm_mday'],$date['tm_year'] + 1900);
+
+			if(!isset($mindate[$type]) || $mindate[$type] > $time)
+			{
+				$mindate[$type] = $time;
+				$minreleases[$type] = $release;
+			}
+		});
+
+		$importances = array(
+			'Album',
+			'Live',
+			'Soundtrack',
+			'Single',
+			'EP',
+			'Compilation',
+			'Remix',
+			'Other',
+		);
+
+		foreach($importances as $importance)
+			if(isset($minreleases[$importance]))
+				return $minreleases[$importance];
+
+
+		if(count($mindate) > 0)
+			return $minreleases[0];
+
+		return false;
+	}
+
 	function ForEachRelease($function)
 	{
 		if(!isset($this->info))
