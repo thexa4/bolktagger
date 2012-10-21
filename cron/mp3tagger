@@ -12,7 +12,7 @@ php collectors/soundtrackcollector.php >> ${LOGPATH}
 php collectors/taggedcollector.php >> ${LOGPATH}
 php collectors/fullalbumcollector.php >> ${LOGPATH}
 
-./updatesearch
+tools/updatesearch
 
 php test/checkrecords.php
 php test/checkreleases.php
