@@ -1,7 +1,0 @@
-#!/usr/bin/env php
-<?php
-chdir(dirname(__DIR__));
-include_once('classes/settings.class.php');
-
-include('tagger/albumtagger.php');
-#include('tagger/playlisttagger.php');
