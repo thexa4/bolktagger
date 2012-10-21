@@ -7,7 +7,7 @@ Settings::EnsureOnlyRunning();
 
 Record::ForAll(function($record)
 {
-	if(!$record->info)
+	if(!isset($record->info))
 		return;
 
 	$title = Settings::CleanString($record->info->title);
