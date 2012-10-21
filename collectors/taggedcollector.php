@@ -9,15 +9,15 @@ Record::ForAll(function($record)
 	if(!isset($record->info))
 		return;
 
-	$title = Settings::CleanString($record->info->title);
+	$title = Utils::CleanString($record->info->title);
 
 	if(count($record->info->artistCredit) < 1)
 		return;
-	$artist = Settings::CleanString($record->info->artistCredit[0]->name);
+	$artist = Utils::CleanString($record->info->artistCredit[0]->name);
 
 	if(count($record->info->releases) < 1)
 		return;
-	$album = Settings::CleanString($record->info->releases[0]->title);
+	$album = Utils::CleanString($record->info->releases[0]->title);
 
 	$dir = Settings::AllAlbumsPath . Settings::CleanPath($artist) . '/' . Settings::CleanPath($album) . '/';
 	$file = $dir . Settings::CleanPath($title) . '.mp3';
