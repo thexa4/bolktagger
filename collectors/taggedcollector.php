@@ -19,8 +19,8 @@ Record::ForAll(function($record)
 		return;
 	$album = Utils::CleanString($record->info->releases[0]->title);
 
-	$dir = Settings::AllAlbumsPath . Settings::CleanPath($artist) . '/' . Settings::CleanPath($album) . '/';
-	$file = $dir . Settings::CleanPath($title) . '.mp3';
+	$dir = Settings::AllAlbumsPath . Utils::CleanPath($artist) . '/' . Utils::CleanPath($album) . '/';
+	$file = $dir . Utils::CleanPath($title) . '.mp3';
 
 	if(!is_file($file) && !is_link($file))
 	{
