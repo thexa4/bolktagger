@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+use MP3::Tag;
+
+if (@ARGV < 2)
+{
+	print "Usage: $0 filename frameid [entry]\n";
+	print "Example: $0 record.mp3 UFID _Data\n";
+	exit;
+}
+
+$mp3 = MP3::Tag->new(@ARGV[0]);
+$frame = @ARGV[1];
+$entry = "Text";
+$value = "";
+if (@ARGV > 2)
+{
+	$entry = @ARGV[2];
+}
+
+$mp3->get_tags();
+
+
+# if ID3v2 tags exists
+if (exists $mp3->{ID3v2})
+{
+	($value, $desc) = $mp3->{ID3v2}->get_frame($frame);
+
+	if (ref $value)
+	{
+		$value = $$value{$entry};
+	}
+}
+
+# clean up
+$mp3->close();
+
+if (!$value)
+{
+	exit -1;
+} else {
+	print "$value\n";
+}
