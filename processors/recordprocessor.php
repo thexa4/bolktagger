@@ -7,10 +7,10 @@ Utils::EnsureOnlyRunning();
 Record::ForAll(function($record) {
 	$record->GetInfo();
 
-	if(!exists($record->info))
+	if(!isset($record->info))
 		return;
 
-	$title = Settings::CleanPath($record->info->title) . '.mp3';
+	$title = Utils::CleanPath($record->info->title) . '.mp3';
 	$changed = false;
 	$record->ForEachRelease(function($release) use ($record, $title, &$changed) {
 

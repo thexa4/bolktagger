@@ -1,4 +1,5 @@
 #!/bin/sh
+exit
 cd `dirname \`dirname $0\``
 MP3PATH=`./setting Mp3Path`
 MP3OWNER=`./setting Mp3Owner`

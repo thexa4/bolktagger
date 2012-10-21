@@ -27,14 +27,14 @@ function process($folder)
 		{
 			$file = $folder . $entry;
 
-			$data = new Fingerprint(Settings::AlbumQueuePath . $file);
+            $data = new Fingerprint(Settings::AlbumQueuePath . $file);
 			if($data->acoustid == false)
 			{
-				unlink(Settings::AlbumQueuePath . $file);
+                unlink(Settings::AlbumQueuePath . $file);
 				print $file . ": fingerprint failed\n";
 				continue;
-			}
-			$tags = @Acoustid::GetMetadata($data);
+            }
+			$tags = Acoustid::GetMetadata($data);
 
 			if(empty($tags['artist']))
 			{

@@ -4,7 +4,7 @@ class Musicbrainz
 	protected static $curl = null;
 	const endpoint = "http://www.musicbrainz.org/ws/2/";
 
-	function InitCurl()
+	static function InitCurl()
 	{
 		if(self::$curl != null)
 			return;
@@ -14,7 +14,7 @@ class Musicbrainz
 		curl_setopt(self::$curl, CURLOPT_USERAGENT, 'BolkTagger/' . Settings::Version . ' ( ' . Settings::Email . ' )' );
 	}
 
-	function GetAlbumMetadata($albummbid)
+	static function GetAlbumMetadata($albummbid)
 	{
 		self::InitCurl();
 
@@ -44,7 +44,7 @@ class Musicbrainz
 		return $output;
 	}
 
-	function GetReleaseMetadata($mbid)
+	static function GetReleaseMetadata($mbid)
 	{
 		self::InitCurl();
 
@@ -68,7 +68,7 @@ class Musicbrainz
 		return $data;
 	}
 
-	function GetRecordMetadata($mbid)
+	static function GetRecordMetadata($mbid)
 	{
 		self::InitCurl();
 
@@ -91,7 +91,7 @@ class Musicbrainz
 		return $output;
 	}
 
-	function ParseReleaseGroupInfo($xml)
+	static function ParseReleaseGroupInfo($xml)
 	{
 		$xml = simplexml_load_string($xml);
 		$g = $xml->{'release-group'};
@@ -117,7 +117,7 @@ class Musicbrainz
 		return $res;
 	}
 
-	function ParseRelease($xmlelement)
+	static function ParseRelease($xmlelement)
 	{
 		$r = new stdClass();
 		$r->id = (string)$xmlelement['id'];
@@ -126,7 +126,7 @@ class Musicbrainz
 		return $r;
 	}
 
-	function ParseArtist($xmlelement)
+	static function ParseArtist($xmlelement)
 	{
 		$a = new stdClass();
 		$a->id = (string)$xmlelement['id'];
@@ -135,7 +135,7 @@ class Musicbrainz
 		return $a;
 	}
 
-	function ParseRecordInfo($xml)
+	static function ParseRecordInfo($xml)
 	{
 		$xml = simplexml_load_string($xml);
 		$r = $xml->{'recording'};
@@ -159,7 +159,7 @@ class Musicbrainz
 		return $res;
 	}
 
-	function ParseReleaseInfo($xml)
+	static function ParseReleaseInfo($xml)
 	{
 		$xml = simplexml_load_string($xml);
 		$r = $xml->release;

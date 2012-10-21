@@ -7,8 +7,8 @@ Installation (debian squeeze)
 ------------
     cd /opt
     git clone git://github.com/thexa4/bolktagger.git
-    apt-get install php5-cli lltag php5-posix normalize-audio
-    apt-get -t testing install acoustid-fingerprinter
+    apt-get install php5-cli php5-curl php5-posix lltag normalize-audio
+    apt-get -t testing install libchromaprint-tools
     adduser --system --group music
     echo '40 * * * * * music /opt/bolktagger/cron/mp3tagger' >> /etc/crontab
     mkdir /var/run/bolktagger
