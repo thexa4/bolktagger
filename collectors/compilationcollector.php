@@ -1,13 +1,8 @@
 <?php
-include_once('classes/acoustid.class.php');
-include_once('classes/musicbrainz.class.php');
-include_once('classes/tagger.class.php');
-include_once('classes/album.class.php');
-include_once('classes/release.class.php');
-include_once('classes/record.class.php');
+include_once('settings.php');
 
 print "Bolk Compilations Collector\n";
-Settings::EnsureOnlyRunning();
+Utils::EnsureOnlyRunning();
 
 Album::ForAll(function($album){
 	// Check missing .mbinfo file and return
@@ -15,7 +10,7 @@ Album::ForAll(function($album){
 		return;
 
 	// Album type should be compilation
-	if(!in_array($album->info->type, ['Compilation']))
+	if(!in_array($album->info->type, array('Compilation')))
 		return;
 
 	// Make sure one release is full
@@ -31,7 +26,7 @@ Album::ForAll(function($album){
 		return;
 
 	$artist = $artists[0]->name;
-	$destfolder = Settings::CompilationsPath . Settings::CleanPath($title) . '/';
+	$destfolder = Settings::CompilationsPath . Utils::CleanPath($title) . '/';
 	if(!is_dir($destfolder))
 	{
 		mkdir($destfolder, 0775, true);

@@ -1,11 +1,8 @@
 <?php
-include_once('classes/acoustid.class.php');
-include_once('classes/fingerprint.class.php');
-include_once('classes/tagger.class.php');
-include_once('classes/settings.class.php');
+include_once('settings.php');
 
 print "Bolk Playlist Tagger\n";
-Settings::EnsureOnlyRunning();
+Utils::EnsureOnlyRunning();
 
 Tagger::IterateFolder(Settings::PlaylistQueuePath,
 	function($file) {
@@ -20,7 +17,8 @@ Tagger::IterateFolder(Settings::PlaylistQueuePath,
 
 		$destination = Settings::PlaylistPath . $file;
 
-		$dir = pathinfo(Settings::PlaylistPath . $file)['dirname'];
+        $dir = pathinfo(Settings::PlaylistPath . $file);
+        $dir = $dir['dirname'];
 		if(!is_dir($dir))
 			mkdir($dir, 0775, true);
 
@@ -65,7 +63,8 @@ function process($folder)
 			}
 			$tags = @Acoustid::GetMetadata($data);
 
-			$path = pathinfo(Settings::PlaylistPath . $file)['dirname'];
+            $path = pathinfo(Settings::PlaylistPath . $file);
+            $path = $path['dirname'];
 			if(!is_dir($path))
 				mkdir($path, 0775, true);
 

@@ -1,12 +1,11 @@
 <?php
-include_once('classes/acoustid.class.php');
-include_once('classes/fingerprint.class.php');
-include_once('classes/tagger.class.php');
-include_once('classes/settings.class.php');
+include_once('settings.php');
 
 print "Bolk Album Tagger\n";
-Settings::EnsureOnlyRunning();
+Utils::EnsureOnlyRunning();
 
+if(!is_dir(Settings::AlbumQueuePath))
+    mkdir(Settings::AlbumQueuePath, 0777, true);
 process('');
 
 function process($folder)

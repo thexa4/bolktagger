@@ -1,6 +1,6 @@
 #!/bin/sh
 cd `dirname \`dirname $0\``
-LOGPATH=`./setting LogPath`
+LOGPATH=`tools/setting LogPath`
 
 php taggers/albumtagger.php >> ${LOGPATH}
 php taggers/playlisttagger.php >> ${LOGPATH}

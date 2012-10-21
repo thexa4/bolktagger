@@ -1,5 +1,5 @@
 #!/usr/bin/env php
 <?php
-include_once('classes/settings.class.php');
+include_once('settings.php');
 
 echo @constant("Settings::$argv[1]");

@@ -1,9 +1,8 @@
 <?php
-include_once('classes/settings.class.php');
-include_once('classes/record.class.php');
+include_once('settings.php');
 
 print "Bolk Record Processor\n";
-Settings::EnsureOnlyRunning();
+Utils::EnsureOnlyRunning();
 
 Record::ForAll(function($record) {
 	$record->GetInfo();

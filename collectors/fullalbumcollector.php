@@ -1,20 +1,15 @@
 <?php
-include_once('classes/acoustid.class.php');
-include_once('classes/musicbrainz.class.php');
-include_once('classes/tagger.class.php');
-include_once('classes/album.class.php');
-include_once('classes/release.class.php');
-include_once('classes/record.class.php');
+include_once('settings.php');
 
 print "Bolk Full Album Collector\n";
-Settings::EnsureOnlyRunning();
+Utils::EnsureOnlyRunning();
 
 Album::ForAll(function($album){
 	// Check missing .mbinfo file and return
 	if(!$album->info)
 		return;
 
-	if(!in_array($album->info->type, ['Album', 'EP', 'Live', 'Other', 'Remix', 'Compilation']))
+	if(!in_array($album->info->type, array('Album', 'EP', 'Live', 'Other', 'Remix', 'Compilation')))
 		return;
 
 	// Make sure one release is full
@@ -30,7 +25,7 @@ Album::ForAll(function($album){
 		return;
 
 	$artist = $artists[0]->name;
-	$destfolder = '/pub/mp3/Uploads/FullAlbum/' . Settings::CleanPath($artist) . '/' . Settings::CleanPath($title) . '/';
+	$destfolder = '/pub/mp3/Uploads/FullAlbum/' . Utils::CleanPath($artist) . '/' . Utils::CleanPath($title) . '/';
 	if(!is_dir($destfolder))
 	{
 		mkdir($destfolder, 0775, true);

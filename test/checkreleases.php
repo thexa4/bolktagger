@@ -1,6 +1,5 @@
 <?php
-include_once('classes/settings.class.php');
-include_once('classes/release.class.php');
+include_once('settings.php');
 
 
 $autofix = false;

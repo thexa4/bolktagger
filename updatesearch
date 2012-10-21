@@ -1,6 +1,6 @@
 #!/bin/sh
-MP3PATH=`./setting Mp3Path`
-ALLALBUMSPATH=`./setting AllAlbumsPath`
+MP3PATH=`tools/setting Mp3Path`
+ALLALBUMSPATH=`tools/setting AllAlbumsPath`
 UPDATEDB=updatedb
 
 # FreeBSD support
