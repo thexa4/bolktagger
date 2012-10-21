@@ -38,7 +38,7 @@ class Acoustid
 		return $res;
 	}
 
-	function GetMetadata($fingerprint)
+	static function GetMetadata($fingerprint)
 	{
 		self::InitCurl();
 

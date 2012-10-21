@@ -1,19 +1,19 @@
 <?php
 class Utils
 {
-	function CleanString($string)
+	static function CleanString($string)
 	{
 		setlocale(LC_ALL, 'en_GB.UTF8');
 		return iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $string);
 	}
 
 	// Strips leading dots, removes slashes and removes unicode characters
-	function CleanPath($string)
+	static function CleanPath($string)
 	{
 		return preg_replace('/^\.+/','',str_replace('/','',self::CleanString($string)));
 	}
 
-	function EnsureOnlyRunning()
+	static function EnsureOnlyRunning()
 	{
 		if(is_file(Settings::LockPath))
 		{
@@ -32,7 +32,7 @@ class Utils
 	}
 
 	// Kill signal 0 doesn't kill it but checks if a signal can be sent
-	function isRunning($pid) {
+	static function isRunning($pid) {
 		return posix_kill($pid, 0);
 	}
 }
