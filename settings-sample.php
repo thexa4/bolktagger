@@ -31,44 +31,8 @@ class Settings
 
 	// The minimum amount of records should be in an Album before it is put into FullAlbumPath
 	const AlbumMinRecords = 4;
-
-	function CleanString($string)
-	{
-		setlocale(LC_ALL, 'en_GB.UTF8');
-		return iconv('UTF-8','ASCII//TRANSLIT//IGNORE', $string);
-	}
-
-	// Strips leading dots, removes slashes and removes unicode characters
-	function CleanPath($string)
-	{
-		return preg_replace('/^\.+/','',str_replace('/','',self::CleanString($string)));
-	}
-
-	function EnsureOnlyRunning()
-	{
-		if(is_file(self::LockPath))
-		{
-			$pid = file_get_contents(self::LockPath);
-			if(!self::isRunning($pid))
-				RemoveLock();
-			else
-				die("Already running\n");
-		}
-
-		$lockfile = fopen(self::LockPath, 'w');
-		fwrite($lockfile, getmypid());
-		fclose($lockfile);
-
-		register_shutdown_function('RemoveLock');
-	}
-
-	// Kill signal 0 doesn't kill it but checks if a signal can be sent
-	function isRunning($pid) {
-		return posix_kill($pid, 0);
-	}
 }
 
-function RemoveLock()
-{
-	unlink(Settings::LockPath);
-}
+spl_autoload_register(function($class) {
+    include('classes/' . strtolower($class) . '.class.php');
+});

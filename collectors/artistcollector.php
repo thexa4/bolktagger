@@ -1,17 +1,14 @@
 <?php
-include_once('classes/acoustid.class.php');
-include_once('classes/musicbrainz.class.php');
-include_once('classes/tagger.class.php');
-include_once('classes/album.class.php');
+include_once('settings.php');
 
 print "Bolk Artist Collector\n";
-Settings::EnsureOnlyRunning();
+Utils::EnsureOnlyRunning();
 
 Album::ForAll(function($album){
 	if(!isset($album->info))
 		return;
 
-	if(!in_array($album->info->type, ['Album', 'Single', 'EP', 'Live', 'Other', 'Remix', 'Compilation']))
+	if(!in_array($album->info->type, array('Album', 'Single', 'EP', 'Live', 'Other', 'Remix', 'Compilation')))
 		return;
 
 	$records = scandir($album->path);
@@ -31,7 +28,7 @@ Album::ForAll(function($album){
 		return;
 
 	$artist = $artists[0]->name;
-	$destfolder = Settings::FullAlbumPath . Settings::CleanPath($artist) . '/' . Settings::CleanPath($title) . '/';
+	$destfolder = Settings::FullAlbumPath . Utils::CleanPath($artist) . '/' . Utils::CleanPath($title) . '/';
 	if(!is_dir($destfolder))
 	{
 		mkdir($destfolder, 0775, true);

@@ -1,6 +1,4 @@
 <?php
-include_once('settings.class.php');
-include_once('musicbrainz.class.php');
 class Album
 {
 	function __construct($mbid)
@@ -55,7 +53,10 @@ class Album
 	}
 
 	public static function ForAll($function)
-	{
+    {
+        if(!is_dir(Settings::SystemAlbumPath))
+            mkdir(Settings::SystemAlbumPath, 0775, true);
+
 		$prefixes = scandir(Settings::SystemAlbumPath);
 		foreach($prefixes as $prefix)
 		{

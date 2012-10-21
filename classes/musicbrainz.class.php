@@ -1,5 +1,4 @@
 <?php
-include_once('settings.class.php');
 class Musicbrainz
 {
 	protected static $curl = null;
