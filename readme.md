@@ -3,17 +3,20 @@ BolkTagger
 
 This application tries to sort unordered directories of mp3s into Artist/Album/Title format. It does this by creating an acoustic fingerprint and identifying the record with [acoustid](http://www.acoustid.org). The record is then given the right id3 tags and moved in the right folder.
 
-Installation
+Installation (debian squeeze)
 ------------
- * Install php5-cli
- * Install lltag
- * Install chromaprint (fpcalc)
- * Install php5-posix
- * Install normalize-audio
- * Create a system user
- * Make the cron script run regularly. Example (crontab): 40 * * * * jukebox /opt/tagger/cron/mp3tagger
- * Create a folder /var/run/bolktagger/ owned by the created user
- * Optionally edit classes/settings.class.php
+    cd /opt
+    git clone git://github.com/thexa4/bolktagger.git
+    apt-get install php5-cli lltag php5-posix normalize-audio
+    apt-get -t testing install acoustid-fingerprinter
+    adduser --system --group music
+    echo '40 * * * * * music /opt/bolktagger/cron/mp3tagger' >> /etc/crontab
+    mkdir /var/run/bolktagger
+    touch /var/log/mp3.log
+    chown music:music /var/run/bolktagger /var/log/mp3.log
+    cp /opt/bolktagger/settings-sample.php /opt/bolktagger/settings.php
+
+Edit the settings.php file to suit your needs.
 
 Taggers
 -------
