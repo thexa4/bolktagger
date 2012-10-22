@@ -34,7 +34,7 @@ function process($folder)
 				print $file . ": fingerprint failed\n";
 				continue;
             }
-			$tags = Acoustid::GetMetadata($data);
+			$tags = @Acoustid::GetMetadata($data);
 
 			if(empty($tags['artist']))
 			{
