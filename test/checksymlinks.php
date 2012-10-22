@@ -7,7 +7,7 @@ $damage = 0;
 if($argc >= 2 && ($argv[1] == 'true' || $argv[1] == 'force'))
 {
 	$autofix = true;
-	Settings::EnsureOnlyRunning();
+	Utils::EnsureOnlyRunning();
 	print "Bolk Record Checker\n";
 	if($argv[1] == 'force')
 	{

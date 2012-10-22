@@ -7,7 +7,7 @@ $damage = false;
 if($argc >= 2 && $argv[1] == 'true')
 {
 	$autofix = true;
-	Settings::EnsureOnlyRunning();
+	Utils::EnsureOnlyRunning();
 	print "Bolk Release Checker\n";
 	print "Running in Autofix mode\n";
 }
