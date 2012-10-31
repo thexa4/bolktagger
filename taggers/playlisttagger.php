@@ -10,15 +10,15 @@ Tagger::IterateFolder(Settings::PlaylistQueuePath,
 		if(is_int($record) && $record == -1)
 		{
 			// Not playable mp3 file
-			//unlink
+			unlink(Settings::PlaylistQueuePath . $file)
 			print $file . " removed\n";
 			return;
 		}
 
 		$destination = Settings::PlaylistPath . $file;
 
-        $dir = pathinfo(Settings::PlaylistPath . $file);
-        $dir = $dir['dirname'];
+	        $dir = pathinfo(Settings::PlaylistPath . $file);
+	        $dir = $dir['dirname'];
 		if(!is_dir($dir))
 			mkdir($dir, 0775, true);
 
@@ -28,7 +28,7 @@ Tagger::IterateFolder(Settings::PlaylistQueuePath,
 				unlink($destination);
 			symlink($record->file, $destination);
 		} else {
-			copy(Settings::PlaylistQueuePath . $file, $destination);
+			rename(Settings::PlaylistQueuePath . $file, $destination);
 		}
 		print $file . " done\n";
 	},
