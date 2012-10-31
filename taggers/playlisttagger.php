@@ -10,7 +10,7 @@ Tagger::IterateFolder(Settings::PlaylistQueuePath,
 		if(is_int($record) && $record == -1)
 		{
 			// Not playable mp3 file
-			unlink(Settings::PlaylistQueuePath . $file)
+			unlink(Settings::PlaylistQueuePath . $file);
 			print $file . " removed\n";
 			return;
 		}
