@@ -22,7 +22,7 @@ class Album
 	function HasFullRelease()
 	{
 		$result = false;
-		$this->ForReleases(function($release) use ($result){
+		$this->ForReleases(function($release) use (&$result){
 			if($release->IsComplete())
 				$result = true;
 		});

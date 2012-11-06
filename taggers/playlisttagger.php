@@ -27,6 +27,9 @@ Tagger::IterateFolder(Settings::PlaylistQueuePath,
 			if(is_file($destination))
 				unlink($destination);
 			symlink($record->file, $destination);
+
+			// Remove from queue
+			unlink(Settings::PlaylistQueuePath . $file);
 		} else {
 			rename(Settings::PlaylistQueuePath . $file, $destination);
 		}
