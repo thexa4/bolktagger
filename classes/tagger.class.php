@@ -85,9 +85,9 @@ class Tagger
 		if(empty($filename) || empty($artist) || empty($title) || empty($mbid))
 			return null;
 
-		$artist = Utils::CleanString($album);
+		$artist = Utils::CleanString($artist);
 		$album = Utils::CleanString($album);
-		$title = Utils::CleanString($album);
+		$title = Utils::CleanString($title);
 
 		self::Tag($filename, $artist, $album, $title, $mbid);
 
