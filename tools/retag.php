@@ -10,9 +10,14 @@ Record::ForAll(function($record) {
 	if(!isset($record->info))
 		return;
 
-	$title = Utils::CleanPath($record->info->title) . '.mp3';
+	$title = Utils::CleanString($record->info->title);
+	$artist = Utils::CleanString($record->info->artistCredit[0]->name);
+	$album = Utils::CleanString($record->info->releases[0]->title);
 
-	Tagger::Tag($record->file, $record->info->artistCredit[0]->name, $record->info->releases[0]->title, $record->info->title, $record->mbid);
+	
+
+	Tagger::Tag($record->file, $artist, $album, $title, $record->mbid);
+	system('lltag --mp3 --id3v2 -S "' . $record->file .'"');
 
 	print($record->mbid . " processed\n");
 });
