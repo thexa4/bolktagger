@@ -29,10 +29,12 @@ Record::ForAll(function($record) use ($autofix, $forcefix, &$damage) {
 		print $record->mbid . ": no audio file present\n";
 		if($autofix)
 		{
-			unlink($record->path . '.mbinfo');
+			@unlink($record->path . '.mbinfo');
+			@unlink($record->path . '.notvalidated');
 			rmdir($record->path);
 			print " - removed record\n";
 			$damage--;
+			return;
 		}
 	}
 
@@ -46,13 +48,15 @@ Record::ForAll(function($record) use ($autofix, $forcefix, &$damage) {
 			$record->GetInfo();
 			if(!$record->info)
 			{
-				if($forcefix)
+				if($forcefix || file_exists($record->path . '.notvalidated'))
 				{
-					unlink($record->path . '.mbinfo');
-					unlink($record->path . 'record');
+					@unlink($record->path . '.mbinfo');
+					@unlink($record->path . '.notvalidated');
+					unlink($record->file);
 					rmdir($record->path);
 					print " - removed record\n";
 					$damage--;
+					return;
 				} else {
 					print " - cannot correct\n";
 				}
